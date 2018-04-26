@@ -2,7 +2,7 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-document"></i>日志详情</el-breadcrumb-item>
+                <el-breadcrumb-item><a class="rank-head-back" @click="routerBack">返回</a></el-breadcrumb-item>
                 <el-breadcrumb-item>{{$route.params.name}}</el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -167,6 +167,9 @@
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
+            },
+            routerBack(){
+                this.$router.go(-1);
             }
         }
     }

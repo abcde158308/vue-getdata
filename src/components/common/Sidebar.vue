@@ -10,8 +10,8 @@
                     </el-submenu>
                 </template>
                 <template v-else>
-                    <el-menu-item :index="item.index">
-                        <i :class="item.icon"></i>{{ item.title }}
+                    <el-menu-item :index="item.index" style="font-size: 16px;">
+                        <i :class="item.icon" style="font-size: 25px;margin: 0 10px 0 0;"></i>{{ item.title }}
                     </el-menu-item>
                 </template>
             </template>
@@ -24,78 +24,7 @@
         data() {
             return {
                 items: [
-                    {
-                        icon: 'el-icon-setting',
-                        index: 'readme',
-                        title: '自述'
-                    },
-                    {
-                        icon: 'el-icon-menu',
-                        index: '2',
-                        title: '表格',
-                        subs: [
-                            {
-                                index: 'basetable',
-                                title: '基础表格'
-                            },
-                            {
-                                index: 'vuetable',
-                                title: 'Vue表格组件'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-date',
-                        index: '3',
-                        title: '表单',
-                        subs: [
-                            {
-                                index: 'baseform',
-                                title: '基本表单'
-                            },
-                            {
-                                index: 'vueeditor',
-                                title: '编辑器'
-                            },
-                            {
-                                index: 'markdown',
-                                title: 'markdown'
-                            },
-                            {
-                                index: 'upload',
-                                title: '文件上传'
-                            },
-                            {
-                                index: 'amm',
-                                title: 'amm'
-                            }
-                        ]
-                    },
-                    {
-                        icon: 'el-icon-star-on',
-                        index: 'basecharts',
-                        title: '图表'
-                    },
-                    {
-                        icon: 'el-icon-upload2',
-                        index: 'drag',
-                        title: '拖拽'
-                    },
-                    {
-                        icon: 'el-icon-document',
-                        index: 'button',
-                        title: '按钮'
-                    },
-                    {
-                        icon: 'el-icon-tickets',
-                        index: 'collpase',
-                        title: '折叠面板'
-                    },
-                    {
-                        icon: 'el-icon-menu',
-                        index: 'carousel',
-                        title: '轮播'
-                    },
+
                     {
                         icon: 'el-icon-picture',
                         index: 'card',

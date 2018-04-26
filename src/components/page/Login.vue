@@ -5,7 +5,7 @@
         <div class="ms-login">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="username">
-                    <el-input v-model="ruleForm.username" placeholder="username"></el-input>
+                        <el-input v-model="ruleForm.username" placeholder="username"></el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                     <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
@@ -25,8 +25,10 @@
             return {
                 ruleForm: {
                     username: '',
-                    password: ''
+                    password: '',
+                    aaa:'222',
                 },
+                url: './static/vuetable.json',
                 rules: {
                     username: [
                         { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -34,6 +36,7 @@
                     password: [
                         { required: true, message: '请输入密码', trigger: 'blur' }
                     ]
+
                 }
             }
         },
@@ -43,12 +46,28 @@
                 self.$refs[formName].validate((valid) => {
                     //判断登录
                     if (valid) {
-                        localStorage.setItem('ms_username',self.ruleForm.username);
-                        if(self.$route.query.redirect){
-                            self.$router.push(self.$route.query.redirect);
-                        }else {
-                            self.$router.push('/readme');
-                        }
+
+                        self.$axios.get(self.url, {page:self.cur_page}).then((res) => {
+                            if(self.ruleForm.username==''){
+
+                            self.$refs.ruleForm.fields[0].error="用户名错误";
+
+                            return false
+
+                            }else {
+                                localStorage.setItem('ms_username',self.ruleForm.username);
+                                if(self.$route.query.redirect){
+                                    self.$router.push(self.$route.query.redirect);
+                                }else {
+                                    self.$router.push('/card');
+                                }
+                            }
+
+
+                    })
+
+
+
 
                     } else {
                         console.log('error submit!!');

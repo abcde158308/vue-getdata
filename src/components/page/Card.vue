@@ -24,6 +24,7 @@
                                suffix-icon="el-icon-search"
                                v-model="select_list">
                        </el-input>
+
                    </el-col>
 
                </el-col>
@@ -35,7 +36,7 @@
              <el-col v-if="imgList" style="text-align: center">
                  <el-col  v-if="data.length">
                      <el-col  v-for="(o,index) in data"  style="padding: 15px;width: 220px;">
-                         <router-link :to="{name: 'tableCont',params:{userId:index,name:o.name}}">
+                         <router-link :to="{name: 'tableCont',params:{userId:index,name:o.name,activeName:activeName}}">
                              <el-card :body-style="{ padding: '0px' }">
                                  <img :src="o.img" class="image">
                                  <div style="padding: 14px;">
@@ -69,7 +70,7 @@
 
                          </el-col>
                          <el-col :span="7" class="show-detail">
-                             <router-link :to="{name: 'tableCont',params:{userId:index,name:o.name}}">
+                             <router-link :to="{name: 'tableCont',params:{userId:index,name:o.name,activeName:activeName}}">
                                  <el-button type="success">查看详情</el-button>
                              </router-link>
 
@@ -170,7 +171,7 @@
                 el_icon_erp:'el-icon-erp',
                 icon_zhankai1:'icon-zhankai1',
                 icon_zhankai:'icon-zhankai',
-                activeName:'all'
+                activeName:this.$route.query.activeName || 'all'
 
             };
         },
@@ -196,6 +197,7 @@
                 })
                 //进行筛选并截取分页
             }
+
         },
         methods:{
             add(){

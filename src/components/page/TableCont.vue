@@ -2,8 +2,9 @@
     <div class="table">
         <div class="crumbs">
             <el-breadcrumb separator="/">
-                <el-breadcrumb-item><i class="el-icon-picture"></i> 平台数据清单</el-breadcrumb-item>
+                <el-breadcrumb-item><a class="rank-head-back" @click="routerBack">返回</a></el-breadcrumb-item>
                 <el-breadcrumb-item>{{ $route.params.name }}</el-breadcrumb-item>
+
             </el-breadcrumb>
         </div>
         <div class="handle-box">
@@ -157,6 +158,9 @@
             },
             handleSelectionChange(val) {
                 this.multipleSelection = val;
+            },
+            routerBack(){
+                this.$router.push({ path: 'card', query: {activeName:this.$route.params.activeName}});
             }
         }
     }
