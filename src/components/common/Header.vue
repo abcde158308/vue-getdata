@@ -1,6 +1,13 @@
 <template>
     <div class="header">
-        <div class="logo">后台管理系统</div>
+        <div class="logo">
+            后台管理系统
+            &nbsp;
+            <router-link to="/updateLog">
+                <el-button icon="el-icon-tickets" circle title="更新日志"></el-button>
+            </router-link>
+
+        </div>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
                 <span class="el-dropdown-link">

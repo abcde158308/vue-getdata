@@ -1,6 +1,7 @@
 <template>
     <div class="login-wrap">
         <div class="ms-title">后台管理系统</div>
+
         <div class="ms-login">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
                 <el-form-item prop="username">
@@ -40,9 +41,15 @@
             submitForm(formName) {
                 const self = this;
                 self.$refs[formName].validate((valid) => {
+                    //判断登录
                     if (valid) {
                         localStorage.setItem('ms_username',self.ruleForm.username);
-                        self.$router.push('/readme');
+                        if(self.$route.query.redirect){
+                            self.$router.push(self.$route.query.redirect);
+                        }else {
+                            self.$router.push('/readme');
+                        }
+
                     } else {
                         console.log('error submit!!');
                         return false;

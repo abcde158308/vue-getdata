@@ -1,6 +1,7 @@
 <template>
     <div>
         <div class="crumbs">
+            
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-date"></i> 表单</el-breadcrumb-item>
                 <el-breadcrumb-item>基本表单</el-breadcrumb-item>
@@ -18,6 +19,7 @@
                         <el-option key="imoo" label="imoo" value="imoo"></el-option>
                     </el-select>
                 </el-form-item>
+
                 <el-form-item label="日期时间">
                     <el-col :span="11">
                         <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"></el-date-picker>
@@ -44,6 +46,18 @@
                         <el-radio label="imoo"></el-radio>
                     </el-radio-group>
                 </el-form-item>
+                <el-form-item>
+                    <el-input-number v-model="num1" controls-position="left" @change="handleChange" :min="1" :max="10"></el-input-number>
+                </el-form-item>
+
+                <el-form-item >
+                    <el-radio-group v-model="radio4" size="medium">
+                        <el-radio-button label="上海" ></el-radio-button>
+                        <el-radio-button label="北京"></el-radio-button>
+                        <el-radio-button label="广州"></el-radio-button>
+                        <el-radio-button label="深圳"></el-radio-button>
+                    </el-radio-group>
+                </el-form-item >
                 <el-form-item label="文本框">
                     <el-input type="textarea" v-model="form.desc"></el-input>
                 </el-form-item>
@@ -70,12 +84,17 @@
                     type: ['步步高'],
                     resource: '小天才',
                     desc: ''
-                }
+                },
+                radio4: '广州',
+                num1:1
             }
         },
         methods: {
             onSubmit() {
                 this.$message.success('提交成功！');
+            },
+            handleChange(value) {
+                console.log(value);
             }
         }
     }

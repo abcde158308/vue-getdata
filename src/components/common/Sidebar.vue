@@ -64,6 +64,10 @@
                             {
                                 index: 'upload',
                                 title: '文件上传'
+                            },
+                            {
+                                index: 'amm',
+                                title: 'amm'
                             }
                         ]
                     },
@@ -76,7 +80,38 @@
                         icon: 'el-icon-upload2',
                         index: 'drag',
                         title: '拖拽'
+                    },
+                    {
+                        icon: 'el-icon-document',
+                        index: 'button',
+                        title: '按钮'
+                    },
+                    {
+                        icon: 'el-icon-tickets',
+                        index: 'collpase',
+                        title: '折叠面板'
+                    },
+                    {
+                        icon: 'el-icon-menu',
+                        index: 'carousel',
+                        title: '轮播'
+                    },
+                    {
+                        icon: 'el-icon-picture',
+                        index: 'card',
+                        title: '平台数据清单'
+                    },
+                    {
+                        icon: 'el-icon-news',
+                        index: 'collection',
+                        title: '采集任务'
+                    },
+                    {
+                        icon: 'el-icon-document',
+                        index: 'log',
+                        title: '采集日志'
                     }
+
                 ]
             }
         },
