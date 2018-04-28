@@ -20,20 +20,20 @@
                     value-format="timestamp"
                     :picker-options="pickerOptions2">
             </el-date-picker>
-            <el-button type="primary" icon="search" @click="search">搜索</el-button>
+            <el-button type="primary" icon="search" @click="getData">搜索</el-button>
 
         </div>
-        <el-table :data="data" border style="width: 620px;">
+        <el-table :data="tableData" border style="max-width: 850px;min-height: 529px;" v-loading="loading">
 
             <el-table-column prop="id"  label="序号"  width="50">
             </el-table-column>
-            <el-table-column prop="collectionDate" label="采集时间" sortable width="150">
+            <el-table-column prop="collectionDate" label="采集时间"  width="150">
             </el-table-column>
-            <el-table-column prop="name" label="任务名称" width="250">
+            <el-table-column prop="name" label="任务名称" min-width="150">
             </el-table-column>
-            <el-table-column prop="tasksTate" label="任务状态" sortable width="80">
+            <el-table-column prop="tasksTate" label="任务状态"  width="80">
             </el-table-column>
-            <el-table-column  label="日志详情" sortable width="88">
+            <el-table-column  label="日志详情"  width="88">
                 <template slot-scope="scope">
                     <router-link :to="{name:'logDetail',params:{id:scope.row.id,name:scope.row.name}}">查看详情</router-link>
                 </template>
@@ -62,6 +62,7 @@
                 select_word: '',
                 collectionDate:'',
                 del_list: [],
+                loading:true,
                 is_search: false,
                 pickerOptions2: {
                     shortcuts: [{
@@ -97,33 +98,12 @@
             this.getData();
         },
         computed: {
-            data(){
-                const self = this;
-                return self.tableData.filter(function(d){
-                    console.log(self.collectionDate)
-                    let is_del = false;
-                    for (let i = 0; i < self.del_list.length; i++) {
-                        if(d.name === self.del_list[i].name){
-                            is_del = true;
-                            break;
-                        }
-                    }
-                    if(!is_del){
 
-                        if((!self.collectionDate||self.collectionDate[0]<new Date(d.collectionDate).getTime()&&new Date(d.collectionDate).getTime()<self.collectionDate[1])&& d.name.indexOf(self.select_word) > -1
-
-                        ){
-                            return  d;
-                        }
-                    }
-                }).slice((self.cur_page-1)*10,self.cur_page*10)
-                //进行筛选并截取分页
-            }
         },
         methods: {
             handleCurrentChange(val){
                 this.cur_page = val;
-                //this.getData();
+                this.getData();
 //                console.log(this.tableData);
 //                this.tableData = this.newTable.slice((val-1)*10,val*10);
 //                console.log(this.tableData)
@@ -132,12 +112,19 @@
 
             getData(){
                 let self = this;
+                self.loading = true;
                 if(process.env.NODE_ENV === 'development'){
-                    // self.url = '/ms/table/list';
+                     self.url = '/ms/table/list';
                 };
-                self.$axios.get(self.url, {page:self.cur_page}).then((res) => {
+                self.$axios.post(self.url, {
+                    page:self.cur_page,
+                    collectionDate:self.collectionDate,
+                    selectWord:self.select_word
+
+                }).then((res) => {
                     self.tableData = res.data.list;
-                self.tolnum = res.data.list.length;
+                    self.tolnum = 100;
+                    self.loading = false;
 
             })
             },
@@ -179,7 +166,7 @@
 
 <style scoped>
     .demonstration{padding: 0 10px;}
-    .pagination{width: 630px;}
+    .pagination{max-width: 850px;}
     .handle-box{
         margin:10px 0 25px 0;
     }

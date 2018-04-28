@@ -35,7 +35,7 @@
 
              <el-col v-if="imgList" style="text-align: center">
                  <el-col  v-if="data.length">
-                     <el-col  v-for="(o,index) in data"  style="padding: 15px;width: 220px;">
+                     <el-col  v-for="(o,index) in data"  style="padding: 15px;width: 208px;">
                          <router-link :to="{name: 'tableCont',params:{userId:index,name:o.name,activeName:activeName}}">
                              <el-card :body-style="{ padding: '0px' }">
                                  <img :src="o.img" class="image">
@@ -61,7 +61,7 @@
                                  {{o.name}}
                              </div>
                              <div class="main">
-                                 涵盖旅游保险网7万家旅行社数据，1.3亿被保人数据，2万余家旅行社理赔数据
+                                 涵盖旅游保险网7万家旅行社数据，1.3亿被保人数据，2万余家旅行社理赔数据,保险网7万家旅行社数据，1.3亿被保人数据，2万余家旅行社理赔数据,保险网7万家旅行社数据，1.3亿被保人数据，2万余家旅行社理赔数据
                              </div>
                              <div class="describe">
                                  <el-col :span="12">2小时前更新130000条数据</el-col>
@@ -88,7 +88,6 @@
 </template>
 
 <style scoped>
-    @import "../../assets/icon/iconfont.css";
     .text {
         font-size: 14px;
     }
@@ -132,6 +131,11 @@
         color: #7e6696;
     }
     .main{
+        overflow : hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         text-align: left;
         font-size: 14px;
         color: #999999;
@@ -152,19 +156,19 @@
             return {
                 currentDate: new Date(),
                 dataArr:[
-                    {name:'旅游保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/log1.png')},
-                    {name:'卫生健康保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/log2.png')},
-                    {name:'教育保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/log3.png')},
-                    {name:'安全生产保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/log4.png')},
-                    {name:'国内各省市天气据',time:'数据更新于2小时前',img:require('../../assets/images/log5.png')},
-                    {name:'微博句法树库',time:'数据更新于2小时前',img:require('../../assets/images/log6.png')},
-                    {name:'微信表情数据',time:'数据更新于2小时前',img:require('../../assets/images/log7.png')},
-                    {name:'公共场所视频数据',time:'数据更新于2小时前',img:require('../../assets/images/log8.png')},
-                    {name:'安全生产保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/log4.png')},
-                    {name:'国内各省市天气据',time:'数据更新于2小时前',img:require('../../assets/images/log5.png')},
-                    {name:'微博句法树库',time:'数据更新于2小时前',img:require('../../assets/images/log6.png')},
-                    {name:'微信表情数据',time:'数据更新于2小时前',img:require('../../assets/images/log7.png')},
-                    {name:'公共场所视频数据',time:'数据更新于2小时前',img:require('../../assets/images/log8.png')}
+                    {name:'旅游保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/flight.jpg')},
+                    {name:'卫生健康保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/journalism.jpg')},
+                    {name:'教育保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/map.jpg')},
+                    {name:'安全生产保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/medical.jpg')},
+                    {name:'国内各省市天气据',time:'数据更新于2小时前',img:require('../../assets/images/passenger.jpg')},
+                    {name:'微博句法树库',time:'数据更新于2小时前',img:require('../../assets/images/scenic.jpg')},
+                    {name:'微信表情数据',time:'数据更新于2小时前',img:require('../../assets/images/tourist.jpg')},
+                    {name:'公共场所视频数据',time:'数据更新于2小时前',img:require('../../assets/images/weather.jpg')},
+                    {name:'安全生产保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/medical.jpg')},
+                    {name:'国内各省市天气据',time:'数据更新于2小时前',img:require('../../assets/images/adhoc.jpg')},
+                    {name:'微博句法树库',time:'数据更新于2小时前',img:require('../../assets/images/security.jpg')},
+                    {name:'微信表情数据',time:'数据更新于2小时前',img:require('../../assets/images/tree.jpg')}
+
                 ],
                 select_list:'',
                 imgList:true,

@@ -1,11 +1,12 @@
 <template>
     <div class="header">
         <div class="logo">
-            后台管理系统
-            &nbsp;
+            数据采集系统<i round class="edition">V1.0</i>
+            <i class="line"></i>
             <router-link to="/updateLog">
-                <el-button icon="el-icon-tickets" circle title="更新日志"></el-button>
+                <i class="el-icon-erp icon-guanliyuan_guanliyuanrizhi"   title="更新日志"></i>
             </router-link>
+            <i class="line"></i>
 
         </div>
         <div class="user-info">
@@ -56,8 +57,30 @@
     }
     .header .logo{
         float: left;
-        width:250px;
+        width:500px;
+        padding: 0 0 0 20px;
+    }
+    .header .logo .line{
+        display: inline-block;
+        width: 1px;
+        height: 38px;
+        background:#353f51 ;
+        vertical-align: middle;
+
+    }
+    .header .logo .edition{
+        width: 38px;
+        height: 18px;
+        line-height: 18px;
         text-align: center;
+        font-size: 12px;
+        color: #fff;
+        background:#1b7be0 ;
+        display: inline-block;
+        border-radius: 20px;
+        vertical-align: middle;
+        margin: 0 47px 0 5px;
+        transform:scale(0.85);
     }
     .user-info {
         float: right;
@@ -83,5 +106,11 @@
     }
     .el-dropdown-menu__item{
         text-align: center;
+    }
+    .icon-guanliyuan_guanliyuanrizhi{
+        color: #fff;
+        font-size: 26px;
+        margin: 0 18px;
+        vertical-align: middle;
     }
 </style>

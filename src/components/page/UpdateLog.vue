@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <div class="card" v-loading="loading" style="min-height: 100%;">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-tickets"></i>更新日志记录</el-breadcrumb-item>
@@ -24,8 +24,9 @@
     export default{
         data(){
             return{
-                url:'./static/updateLog.json',
-                logData:''
+                url:'/ms/table/list',
+                logData:'',
+                loading:true
             }
         },
         created(){
@@ -34,9 +35,9 @@
         methods:{
             getData(){
                 let self = this;
-                self.$axios.get(self.url, {page:self.cur_page}).then((res) => {
+                self.$axios.post(self.url, {page:self.cur_page}).then((res) => {
                     self.logData = res.data.list;
-                    console.log(res.data.list);
+                    self.loading= false;
                 })
 
             }

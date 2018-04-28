@@ -26,17 +26,17 @@
                 items: [
 
                     {
-                        icon: 'el-icon-picture',
+                        icon: 'el-icon-erp icon-shujuku',
                         index: 'card',
-                        title: '平台数据清单'
+                        title: '数据清单'
                     },
                     {
-                        icon: 'el-icon-news',
+                        icon: 'el-icon-erp icon-renwutongjibaobiao1',
                         index: 'collection',
                         title: '采集任务'
                     },
                     {
-                        icon: 'el-icon-document',
+                        icon: 'el-icon-erp icon-rizhiguanli',
                         index: 'log',
                         title: '采集日志'
                     }
@@ -53,6 +53,7 @@
 </script>
 
 <style scoped>
+    @import "../../assets/icon/iconfont.css";
     .sidebar{
         display: block;
         position: absolute;

@@ -13,19 +13,19 @@
             <el-input v-model="select_name" placeholder="筛选姓名" class="handle-input mr10"></el-input>
             <span class="demonstration">身份证号：</span>
             <el-input v-model="select_IdentificationNumber" placeholder="筛选身份证号" class="handle-input mr10"></el-input>
-            <el-button type="primary" icon="search" @click="search">搜索</el-button>
+            <el-button type="primary" icon="search" @click="getData">搜索</el-button>
         </div>
-        <el-table :data="data" border style="width: 752px;">
+        <el-table :data="tableData" border style="width: 702px;min-height: 529px;" v-loading="loading" >
 
             <el-table-column prop="id"  label="序号"  width="50">
             </el-table-column>
-            <el-table-column prop="name" label="姓名" sortable width="120">
+            <el-table-column prop="name" label="姓名"  width="120">
             </el-table-column>
-            <el-table-column prop="documentType" label="证件类型" sortable width="180">
+            <el-table-column prop="documentType" label="证件类型"  width="180">
             </el-table-column>
             <el-table-column prop="IdentificationNumber" label="证件号码" width="250">
             </el-table-column>
-            <el-table-column prop="sex" label="性别" sortable width="150">
+            <el-table-column prop="sex" label="性别"  width="100">
             </el-table-column>
 
         </el-table>
@@ -53,6 +53,7 @@
                 collectionDate:'',
                 del_list: [],
                 is_search: false,
+                loading:true,
                 pickerOptions2: {
                     shortcuts: [{
                         text: '最近一周',
@@ -87,48 +88,32 @@
             this.getData();
         },
         computed: {
-            data(){
-                const self = this;
-                return self.tableData.filter(function(d){
-                    console.log(self.collectionDate)
-                    let is_del = false;
-                    for (let i = 0; i < self.del_list.length; i++) {
-                        if(d.name === self.del_list[i].name){
-                            is_del = true;
-                            break;
-                        }
-                    }
-                    if(!is_del){
 
-                        if(d.name.indexOf(self.select_name) > -1 &&d.IdentificationNumber.indexOf(self.select_IdentificationNumber) > -1
-                        ){
-                            return  d;
-                        }
-                    }
-                }).slice((self.cur_page-1)*10,self.cur_page*10)
-                //进行筛选并截取分页
-            }
         },
         methods: {
             handleCurrentChange(val){
                 this.cur_page = val;
-                //this.getData();
-//                console.log(this.tableData);
-//                this.tableData = this.newTable.slice((val-1)*10,val*10);
-//                console.log(this.tableData)
-
+                this.getData();
             },
 
             getData(){
-                let self = this;
-                if(process.env.NODE_ENV === 'development'){
-                   // self.url = '/ms/table/list';
-                };
-                self.$axios.get(self.url, {page:self.cur_page}).then((res) => {
-                    self.tableData = res.data.list;
-                    self.tolnum = res.data.list.length;
 
-            })
+                let self = this;
+                self.loading = true;
+                if(process.env.NODE_ENV === 'development'){
+                    self.url = '/ms/table/list';
+                };
+                self.$axios.post(self.url, {
+                    page:self.cur_page,
+                    selectName:self.select_name,
+                    selectIdentificationNumber:self.select_IdentificationNumber
+                }).then((res) => {
+                    self.tableData = res.data.list;
+                    self.tolnum = 100;
+                    self.loading=false;
+
+
+                })
             },
             search(){
                 this.is_search = true;
@@ -168,7 +153,7 @@
 
 <style scoped>
 .demonstration{padding: 0 10px;}
-.pagination{width: 750px;}
+.pagination{width: 702px;}
 .handle-box{
     margin:10px 0 25px 0;
 }
