@@ -3,29 +3,22 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><a class="rank-head-back" @click="routerBack">返回</a></el-breadcrumb-item>
+                <span>{{$route.params.userId}}</span>
                 <el-breadcrumb-item>{{ $route.params.name }}</el-breadcrumb-item>
 
             </el-breadcrumb>
         </div>
-        <div class="handle-box">
+        <!--<div class="handle-box">-->
 
-            <span class="demonstration">姓名：</span>
-            <el-input v-model="select_name" placeholder="筛选姓名" class="handle-input mr10"></el-input>
-            <span class="demonstration">身份证号：</span>
-            <el-input v-model="select_IdentificationNumber" placeholder="筛选身份证号" class="handle-input mr10"></el-input>
-            <el-button type="primary" icon="search" @click="getData">搜索</el-button>
-        </div>
-        <el-table :data="tableData" border style="width: 702px;min-height: 529px;" v-loading="loading" >
+            <!--<span class="demonstration">姓名：</span>-->
+            <!--<el-input v-model="select_name" placeholder="筛选姓名" class="handle-input mr10"></el-input>-->
+            <!--<span class="demonstration">身份证号：</span>-->
+            <!--<el-input v-model="select_IdentificationNumber" placeholder="筛选身份证号" class="handle-input mr10"></el-input>-->
+            <!--<el-button type="primary" icon="search" @click="getData">搜索</el-button>-->
+        <!--</div>-->
+        <el-table :data="tableData" border style="width:100%;" v-loading="loading"  show-overflow-tooltip="true">
 
-            <el-table-column prop="id"  label="序号"  width="50">
-            </el-table-column>
-            <el-table-column prop="name" label="姓名"  width="120">
-            </el-table-column>
-            <el-table-column prop="documentType" label="证件类型"  width="180">
-            </el-table-column>
-            <el-table-column prop="IdentificationNumber" label="证件号码" width="250">
-            </el-table-column>
-            <el-table-column prop="sex" label="性别"  width="100">
+            <el-table-column :prop="item.attname"   :label="item.descript"  v-for="(item,index) in tableHeader" >
             </el-table-column>
 
         </el-table>
@@ -43,8 +36,9 @@
     export default {
         data() {
             return {
-                url: './static/user.json',
+                url: process.env.API_ROOT+'/home/searchdatadetail',
                 tableData: [],
+                tableHeader: [],
                 tolnum:100,
                 cur_page: 1,
                 multipleSelection: [],
@@ -101,18 +95,19 @@
                 let self = this;
                 self.loading = true;
                 if(process.env.NODE_ENV === 'development'){
-                    self.url = '/ms/table/list';
+                    self.url = process.env.API_ROOT+'/home/searchdatadetail';
                 };
                 self.$axios.post(self.url, {
-                    page:self.cur_page,
-                    selectName:self.select_name,
-                    selectIdentificationNumber:self.select_IdentificationNumber
+                    pageNum:self.cur_page,
+                    code:self.$route.params.userId,
+                    pageSize:10
+
                 }).then((res) => {
-                    self.tableData = res.data.list;
-                    self.tolnum = 100;
+                    console.log(res.data.data.tableContent.list);
+                    self.tableHeader = res.data.data.columnDescriptions;
+                    self.tableData = res.data.data.tableContent.list;
+                    self.tolnum = res.data.data.tableContent.total;
                     self.loading=false;
-
-
                 })
             },
             search(){
@@ -151,9 +146,10 @@
     }
 </script>
 
-<style scoped>
-.demonstration{padding: 0 10px;}
-.pagination{width: 702px;}
+<style >
+  .cell{max-height: 94px !important;overflow: auto !important;}
+ .demonstration{padding: 0 10px;}
+.pagination{width: 100%;}
 .handle-box{
     margin:10px 0 25px 0;
 }
@@ -164,4 +160,5 @@
     width: 180px;
     display: inline-block;
 }
+.minHeight{min-height: 529px;}
 </style>

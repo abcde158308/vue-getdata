@@ -6,7 +6,7 @@
             </el-breadcrumb>
         </div>
         <div class="handle-box">
-            <span class="demonstration">任务名称：</span>
+            <span class="demonstration">spider名称：</span>
             <el-input v-model="select_word" placeholder="筛选任务名称" class="handle-input mr10"></el-input>
             <span class="demonstration">采集时间：</span>
             <el-date-picker
@@ -23,20 +23,20 @@
             <el-button type="primary" icon="search" @click="getData">搜索</el-button>
 
         </div>
-        <el-table :data="tableData" border style="max-width: 850px;min-height: 529px;" v-loading="loading">
+        <el-table :data="tableData" border style="max-width: 1300px;" v-loading="loading">
 
-            <el-table-column prop="id"  label="序号"  width="50">
+            <el-table-column prop="index"  label="序号"  width="50">
             </el-table-column>
-            <el-table-column prop="collectionDate" label="采集时间"  width="150">
+            <el-table-column prop="scrapyname" label="spider名称"  width="125">
             </el-table-column>
-            <el-table-column prop="name" label="任务名称" min-width="150">
+            <el-table-column prop="typeCode" label="出错类型" width="100">
             </el-table-column>
-            <el-table-column prop="tasksTate" label="任务状态"  width="80">
+            <el-table-column prop="detail" label="错误原因" min-width="170">
             </el-table-column>
-            <el-table-column  label="日志详情"  width="88">
-                <template slot-scope="scope">
-                    <router-link :to="{name:'logDetail',params:{id:scope.row.id,name:scope.row.name}}">查看详情</router-link>
-                </template>
+            <el-table-column prop="errorUrl" label="错误链接"  width="250">
+            </el-table-column>
+
+            <el-table-column prop="insTime" label="时间"  width="170">
             </el-table-column>
 
         </el-table>
@@ -54,7 +54,7 @@
     export default {
         data() {
             return {
-                url: './static/vuetable.json',
+                url: process.env.API_ROOT+'/loginfo/findbycondition',
                 tableData: [],
                 tolnum:100,
                 cur_page: 1,
@@ -114,16 +114,19 @@
                 let self = this;
                 self.loading = true;
                 if(process.env.NODE_ENV === 'development'){
-                     self.url = '/ms/table/list';
+                     self.url = process.env.API_ROOT+'/loginfo/findbycondition';
                 };
                 self.$axios.post(self.url, {
-                    page:self.cur_page,
-                    collectionDate:self.collectionDate,
-                    selectWord:self.select_word
+                    pageNum:self.cur_page,
+                    start:self.collectionDate[0],
+                    end:self.collectionDate[1],
+                    pageSize:10,
+                    name:self.select_word
 
                 }).then((res) => {
-                    self.tableData = res.data.list;
-                    self.tolnum = 100;
+                    console.log(res);
+                    self.tableData = res.data.data.list;
+                    self.tolnum = res.data.data.total;
                     self.loading = false;
 
             })
@@ -166,7 +169,7 @@
 
 <style scoped>
     .demonstration{padding: 0 10px;}
-    .pagination{max-width: 850px;}
+    .pagination{max-width: 1300px;}
     .handle-box{
         margin:10px 0 25px 0;
     }

@@ -3,22 +3,19 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item><i class="el-icon-news"></i> 采集任务</el-breadcrumb-item>
+                <i class="el-icon-refresh" style="cursor: Pointer" @click="getData"></i>
             </el-breadcrumb>
         </div>
         <div class="handle-box">
             <span class="demonstration">筛选类型：</span>
             <el-select v-model="select_cate" placeholder="筛选类型" class="handle-select mr10">
-                <el-option key="1" label="全部" value="全部" selected></el-option>
-                <el-option key="2" label="内部" value="内部"></el-option>
-                <el-option key="3" label="外部" value="外部"></el-option>
+                <el-option key="all" label="全部" value="" selected></el-option>
+                <el-option v-for="(item,index) in selectType" :key="index" :label="item.text" :value="item.code" selected></el-option>
             </el-select>
             <span class="demonstration">筛选状态：</span>
             <el-select v-model="select_state" placeholder="筛选状态" class="handle-select mr10">
-                <el-option key="4" label="已完成" value="已完成"></el-option>
-                <el-option key="5" label="失败" value="失败"></el-option>
-                <el-option key="6" label="采集中" value="采集中"></el-option>
-                <el-option key="7" label="暂停" value="暂停"></el-option>
-                <el-option key="8" label="已终止" value="已终止"></el-option>
+                <el-option  key="all" label="全部" value=""></el-option>
+                <el-option v-for="(item,index) in selectStatus" :key="index" :label="item.text" :value="item.code"></el-option>
             </el-select>
             <span class="demonstration">采集时间：</span>
             <el-date-picker
@@ -36,23 +33,20 @@
             <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
             <el-button type="primary" icon="search" @click="getData">搜索</el-button>
         </div>
-        <el-table :data="tableData" border style="max-width: 1300px;min-height: 529px;" v-loading="loading">
-
-            <el-table-column prop="id"  label="序号"  width="50">
-            </el-table-column>
-            <el-table-column prop="type" label="类型"  width="100">
+        <el-table :data="tableData" border style="max-width: 1300px;" v-loading="loading">
+            <el-table-column prop="typeCode" label="类型"  width="100">
             </el-table-column>
             <el-table-column prop="keyword" label="关键词"  width="100">
             </el-table-column>
             <el-table-column prop="name" label="任务名称" min-width="150">
             </el-table-column>
-            <el-table-column prop="collectionDate" label="采集时间"  width="150">
+            <el-table-column prop="colTs" label="采集时间"  width="160">
             </el-table-column>
-            <el-table-column prop="updateDate" label="更新时间"  width="150">
+            <el-table-column prop="uptTs" label="更新时间"  width="160">
             </el-table-column>
-            <el-table-column prop="tasksTate" label="任务状态"  width="80">
+            <el-table-column prop="statusCode" label="任务状态"  width="100">
             </el-table-column>
-            <el-table-column prop="dataQuantity" label="数据量"  width="80">
+            <el-table-column prop="count" label="数量"  width="100">
             </el-table-column>
 
         </el-table>
@@ -70,12 +64,15 @@
     export default {
         data() {
             return {
-                url: './static/vuetable.json',
+                url: process.env.API_ROOT+'/taskinfo/findbycondition',
+                statusUrl: process.env.API_ROOT+'/taskinfo/initcondition',
                 tableData: [],
                 tolnum:100,
                 cur_page: 1,
+                selectStatus:[],
+                selectType:[],
                 multipleSelection: [],
-                select_cate: '全部',
+                select_cate: '',
                 loading:true,
                 select_word: '',
                 select_state:'',
@@ -113,7 +110,9 @@
             }
         },
         created(){
+            this.getstatus();
             this.getData();
+
         },
         computed: {
                 data(){
@@ -129,28 +128,47 @@
 //                console.log(this.tableData)
 
             },
-
-            getData(){
+            getstatus(){
 
                 let self = this;
-                self.loading = true;
                 if(process.env.NODE_ENV === 'development'){
-                     self.url = '/ms/table/list';
+                    self.statusUrl = process.env.API_ROOT+'/taskinfo/initcondition';
                 };
-                self.$axios.post(self.url,
-                        {
-                             page:self.cur_page,
-                             selectCate:self.select_cate,
-                             selectState:self.selectState,
-                             collectionDate:self.collectionDate,
-                             selectWord:self.select_word
-                        }
-                        ).then((res) => {
-                    self.tableData = res.data.list;
-                    self.tolnum = 100;
-                    self.loading = false;
+                self.$axios.get(self.statusUrl,{}
+                ).then((res) => {
+
+                    console.log(res.data.data.selectStatus);
+                    self.selectStatus= res.data.data.selectStatus;
+                    self.selectType= res.data.data.selectType;
+                })
+
+            },
+            getData(){
+
+                    let self = this;
+                    self.loading = true;
+                    if(process.env.NODE_ENV === 'development'){
+                        self.url = process.env.API_ROOT+'/taskinfo/findbycondition';
+                    };
+                    self.$axios.post(self.url,
+                            {
+                                pageNum:self.cur_page,
+                                pageSize:10,
+                                type:self.select_cate,
+                                status:self.select_state,
+                                start:self.collectionDate[0],
+                                end:self.collectionDate[1],
+                                key:self.select_word
+                            }
+                    ).then((res) => {
+
+                        console.log(res.data);
+                        self.tableData = res.data.data.list;
+                        self.tolnum = res.data.data.total;
+                        self.loading = false;
 
             })
+
             },
             search(){
                 this.is_search = true;

@@ -5,8 +5,8 @@
                <el-col :span="16">
                    <el-tabs v-model="activeName">
                        <el-tab-pane label="全部" name="all"></el-tab-pane>
-                       <el-tab-pane label="内部数据清单" name="旅游"></el-tab-pane>
-                       <el-tab-pane label="外部数据清单" name="教育"></el-tab-pane>
+                       <el-tab-pane label="内部数据清单" name="SDT101"></el-tab-pane>
+                       <el-tab-pane label="外部数据清单" name="SDT102"></el-tab-pane>
 
                    </el-tabs>
                </el-col>
@@ -35,14 +35,14 @@
 
              <el-col v-if="imgList" style="text-align: center">
                  <el-col  v-if="data.length">
-                     <el-col  v-for="(o,index) in data"  style="padding: 15px;width: 208px;">
-                         <router-link :to="{name: 'tableCont',params:{userId:index,name:o.name,activeName:activeName}}">
+                     <el-col  v-for="(o,index) in data"  style="padding: 15px;width: 208px;" :key="index">
+                         <router-link :to="{name: 'tableCont',params:{userId:o.code,name:o.name,activeName:activeName}}">
                              <el-card :body-style="{ padding: '0px' }">
-                                 <img :src="o.img" class="image">
+                                 <img :src="root+o.imgUrl" class="image">
                                  <div style="padding: 14px;">
-                                     <span>{{o.name}}</span>
+                                     <span class="oname">{{o.name}}</span>
                                      <div class="bottom clearfix">
-                                         <time class="time">{{o.time}}</time>
+                                         <time class="time">{{o.showTime}}</time>
 
                                      </div>
                                  </div>
@@ -54,23 +54,23 @@
              </el-col>
              <el-col v-else class="box-card">
                  <el-col  v-if="data.length">
-                     <el-col class="text item" v-for="(o,index) in data">
-                         <el-col :span="5"><img :src="o.img" alt=""></el-col>
+                      <el-col class="text item" v-for="(o,index) in data" :key="index">
+                         <el-col :span="5"><img :src="root+o.imgUrl" alt=""></el-col>
                          <el-col :span="12">
                              <div class="title">
                                  {{o.name}}
                              </div>
                              <div class="main">
-                                 涵盖旅游保险网7万家旅行社数据，1.3亿被保人数据，2万余家旅行社理赔数据,保险网7万家旅行社数据，1.3亿被保人数据，2万余家旅行社理赔数据,保险网7万家旅行社数据，1.3亿被保人数据，2万余家旅行社理赔数据
+                                {{o.description}}
                              </div>
                              <div class="describe">
-                                 <el-col :span="12">2小时前更新130000条数据</el-col>
-                                 <el-col :span="12">大小150KB</el-col>
+                                 <el-col :span="12">{{o.showTime}}</el-col>
+                                 <el-col :span="12">{{o.size}}</el-col>
                              </div>
 
                          </el-col>
                          <el-col :span="7" class="show-detail">
-                             <router-link :to="{name: 'tableCont',params:{userId:index,name:o.name,activeName:activeName}}">
+                             <router-link :to="{name: 'tableCont',params:{userId:o.code,name:o.name,activeName:activeName}}">
                                  <el-button type="success">查看详情</el-button>
                              </router-link>
 
@@ -110,7 +110,14 @@
         padding: 0;
         float: right;
     }
-
+    .oname{
+        width: 144px;
+        height: 40px;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+    }
     .image {
         width: 100%;
         display: block;
@@ -154,22 +161,10 @@
     export default {
         data() {
             return {
+                url:process.env.API_ROOT+'/home/searchdatalist',
+                root:process.env.API_ROOT,
                 currentDate: new Date(),
-                dataArr:[
-                    {name:'旅游保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/flight.jpg')},
-                    {name:'卫生健康保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/journalism.jpg')},
-                    {name:'教育保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/map.jpg')},
-                    {name:'安全生产保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/medical.jpg')},
-                    {name:'国内各省市天气据',time:'数据更新于2小时前',img:require('../../assets/images/passenger.jpg')},
-                    {name:'微博句法树库',time:'数据更新于2小时前',img:require('../../assets/images/scenic.jpg')},
-                    {name:'微信表情数据',time:'数据更新于2小时前',img:require('../../assets/images/tourist.jpg')},
-                    {name:'公共场所视频数据',time:'数据更新于2小时前',img:require('../../assets/images/weather.jpg')},
-                    {name:'安全生产保险网数据',time:'数据更新于2小时前',img:require('../../assets/images/medical.jpg')},
-                    {name:'国内各省市天气据',time:'数据更新于2小时前',img:require('../../assets/images/adhoc.jpg')},
-                    {name:'微博句法树库',time:'数据更新于2小时前',img:require('../../assets/images/security.jpg')},
-                    {name:'微信表情数据',time:'数据更新于2小时前',img:require('../../assets/images/tree.jpg')}
-
-                ],
+                dataArr:[],
                 select_list:'',
                 imgList:true,
                 el_icon_erp:'el-icon-erp',
@@ -178,6 +173,9 @@
                 activeName:this.$route.query.activeName || 'all'
 
             };
+        },
+        created(){
+            this.getData();
         },
         computed:{
             data(){
@@ -190,7 +188,7 @@
                                 return  d;
                             }
                         }else {
-                            if(d.name.indexOf(self.select_list) > -1&&d.name.indexOf(self.activeName) > -1
+                            if(d.name.indexOf(self.select_list) > -1&&d.typeCode.indexOf(self.activeName) > -1
                             ){
                                 return  d;
                             }
@@ -209,7 +207,26 @@
             },
             changeList(){
                 this.imgList = !this.imgList;
-            }
+            },
+            getData(){
+
+                let self = this;
+                self.loading = true;
+                if(process.env.NODE_ENV === 'development'){
+                    self.url = process.env.API_ROOT+'/home/searchdatalist';
+                };
+                self.$axios.get(self.url,{},
+                        {
+                            headers: {
+                                "Content-Type": "application/json;charset=utf-8"
+                            }
+                        }
+
+                ).then((res) => {
+                    self.dataArr = res.data.data.list;
+
+                })
+            },
         }
     }
 </script>

@@ -7,12 +7,13 @@
             </el-breadcrumb>
         </div>
         <el-col :span="24">
-            <el-card v-for="o in logData" class="card-box">
+            <el-card v-for="(o,index) in logData" class="card-box" :key="index">
                 <div slot="header" class="clearfix">
-                    <span>{{o.name}}</span>
+                    <span>{{o.version}}</span>
                 </div>
-                <div v-for="o in o.warningDetail" class="text item">
-                    {{o}}
+                <div v-for="o of o.list" class="text item" :key="o.code">
+                    <span>{{o.name}}</span>
+                    <p v-for="(o,index) in o.list" :key="index">[{{o.functionText}}]{{o.systemName+o.systemVersion+" 更新内容："+o.content}}</p>
                 </div>
             </el-card>
         </el-col>
@@ -24,7 +25,7 @@
     export default{
         data(){
             return{
-                url:'/ms/table/list',
+                url:process.env.API_ROOT+'/loginfo/versioninfo',
                 logData:'',
                 loading:true
             }
@@ -35,8 +36,9 @@
         methods:{
             getData(){
                 let self = this;
-                self.$axios.post(self.url, {page:self.cur_page}).then((res) => {
-                    self.logData = res.data.list;
+                self.$axios.get(self.url, {page:self.cur_page}).then((res) => {
+                    self.logData = res.data.data;
+                    console.log(res);
                     self.loading= false;
                 })
 

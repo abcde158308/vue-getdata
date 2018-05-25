@@ -13,7 +13,7 @@
                 <div class="login-btn">
                     <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
                 </div>
-                <p style="font-size:12px;line-height:30px;color:#999;">Tips : 用户名和密码随便填。</p>
+                <p style="font-size:12px;line-height:30px;color:#999;"></p>
             </el-form>
         </div>
     </div>
@@ -28,7 +28,7 @@
                     password: '',
                     aaa:'222',
                 },
-                url: './static/vuetable.json',
+                url: process.env.API_ROOT+'/loginpost',
                 rules: {
                     username: [
                         { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -43,16 +43,20 @@
         methods: {
             submitForm(formName) {
                 const self = this;
+                if(process.env.NODE_ENV === 'development'){
+                    self.url = process.env.API_ROOT+'/loginpost';
+                };
                 self.$refs[formName].validate((valid) => {
                     //判断登录
                     if (valid) {
 
-                        self.$axios.get(self.url, {page:self.cur_page}).then((res) => {
-                            if(self.ruleForm.username==''){
+                        self.$axios.post(self.url, {name:self.ruleForm.username,passWord:self.ruleForm.password}
+                        ).then((res) => {
+                            if(res.data.rc=='500'){
 
-                            self.$refs.ruleForm.fields[0].error="用户名错误";
+                                self.$refs.ruleForm.fields[0].error=res.data.msg;
 
-                            return false
+                                 return false
 
                             }else {
                                 localStorage.setItem('ms_username',self.ruleForm.username);
@@ -69,7 +73,7 @@
 
 
 
-                    } else {
+                    }else{
                         console.log('error submit!!');
                         return false;
                     }

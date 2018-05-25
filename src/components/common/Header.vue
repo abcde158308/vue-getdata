@@ -38,7 +38,7 @@
         methods:{
             handleCommand(command) {
                 if(command == 'loginout'){
-                    localStorage.removeItem('ms_username')
+                    localStorage.removeItem('ms_username');
                     this.$router.push('/login');
                 }
             }

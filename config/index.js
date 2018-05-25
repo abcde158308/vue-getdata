@@ -22,14 +22,15 @@ module.exports = {
         bundleAnalyzerReport: process.env.npm_config_report
     },
     dev: {
+        host: '127.0.0.1',
         env: require('./dev.env'),
-        port: 8080,
+        port: 8010,
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
         assetsPublicPath: '/',
         proxyTable: {
             '/api':{
-                target:'http://jsonplaceholder.typicode.com',
+                target:'http://10.30.32.135:8021',
                 changeOrigin:true,
                 pathRewrite:{
                     '/api':''
