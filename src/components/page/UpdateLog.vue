@@ -26,7 +26,7 @@
         data(){
             return{
                 url:process.env.API_ROOT+'/loginfo/versioninfo',
-                logData:'',
+                logData:[],
                 loading:true
             }
         },
@@ -37,7 +37,7 @@
             getData(){
                 let self = this;
                 self.$axios.get(self.url, {page:self.cur_page}).then((res) => {
-                    self.logData = res.data.data;
+                    self.logData = res.data.data.reverse();
                     console.log(res);
                     self.loading= false;
                 })
@@ -46,7 +46,6 @@
         }
     }
 </script>
-
 <style>
     .text {
         font-size: 14px;
